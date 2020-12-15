@@ -1,7 +1,16 @@
 import random
 import string
+import inquirer
 
 from words import words
+
+play_again = [
+    inquirer.List(
+        'play_again',
+        message='Would you like to play again?',
+        choices=['Yes', 'No']
+    )
+]
 
 def get_valid_word(words):
     word = random.choice(words)
@@ -12,7 +21,15 @@ def get_valid_word(words):
     return word.upper()
 
 def print_hangman(attempt):
-    if (attempt == 6):
+    if (attempt == 7):
+        print("_________")
+        print("|")
+        print("|")
+        print("|")
+        print("|")
+        print("|")
+        print("|________")
+    elif (attempt == 6):
         print("_________")
         print("|	 |")
         print("|")
@@ -70,7 +87,6 @@ def print_hangman(attempt):
         print("|________")
         print("\n")
 
-
 def hangman():
     word = get_valid_word(words)
 
@@ -78,11 +94,15 @@ def hangman():
     alphabet = set(string.ascii_uppercase)
     guessed_letters = set()
 
-    attempts = 6
+    attempts = 7
     print_hangman(attempts)
+    attempts -= 1
+    
+    print('\nLet\'s play hangman!')
 
     while len(letters) > 0 and attempts >= 0:
         # intro
+        
         print('\nYou have guessed these letters: ', ' '.join(guessed_letters))
 
         letter_list = [letter if letter in guessed_letters else '-' for letter in word]
@@ -111,5 +131,11 @@ def hangman():
         print('\nYou lose! The word was ',word)
     else:
         print('\nCorrect! The word is ',word)
+
+    another_game = inquirer.prompt(play_again)
+    if another_game['play_again'] == 'Yes':
+        hangman()
+    else:
+        print('\nGoodbye!\n')
 
 hangman()
