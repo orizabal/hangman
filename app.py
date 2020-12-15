@@ -6,10 +6,70 @@ from words import words
 def get_valid_word(words):
     word = random.choice(words)
 
-    while '-' in word or ' ' in word:
+    while '-' in word or ' ' in word or len(word) < 6:
         word = random.choice(words)
 
     return word.upper()
+
+def print_hangman(attempt):
+    if (attempt == 6):
+        print("_________")
+        print("|	 |")
+        print("|")
+        print("|")
+        print("|")
+        print("|")
+        print("|________")
+    elif (attempt == 5):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|")
+        print("|")
+        print("|")
+        print("|________")
+    elif (attempt == 4):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|	 |")
+        print("|	 |")
+        print("|")
+        print("|________")
+    elif (attempt == 3):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|	\|")
+        print("|	 |")
+        print("|")
+        print("|________")
+    elif (attempt == 2):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|	\|/")
+        print("|	 |")
+        print("|")
+        print("|________")
+    elif (attempt == 1):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|	\|/")
+        print("|	 |")
+        print("|	/ ")
+        print("|________")
+    elif (attempt == 0):
+        print( "_________")
+        print("|	 |")
+        print("|	 O")
+        print("|	\|/")
+        print("|	 |")
+        print("|	/ \ ")
+        print("|________")
+        print("\n")
+
 
 def hangman():
     word = get_valid_word(words)
@@ -18,7 +78,10 @@ def hangman():
     alphabet = set(string.ascii_uppercase)
     guessed_letters = set()
 
-    while len(letters) > 0:
+    attempts = 6
+    print_hangman(attempts)
+
+    while len(letters) > 0 and attempts >= 0:
         # intro
         print('\nYou have guessed these letters: ', ' '.join(guessed_letters))
 
@@ -35,11 +98,18 @@ def hangman():
             # if letter is in the word, remove from letters
             if user_guess in letters:
                 letters.remove(user_guess)
+            else:
+                print('\nThat guess was incorrect!\n')
+                print_hangman(attempts)
+                attempts -= 1
         elif user_guess in guessed_letters:
             print('\nYou\'ve already guessed this letter!\n')
         else:
             print('\nYou\'ve entered an invalid character. Please try again.\n')
 
-    print('\nCorrect! The word is ',word)
+    if len(letters) > 0:
+        print('\nYou lose! The word was ',word)
+    else:
+        print('\nCorrect! The word is ',word)
 
 hangman()
